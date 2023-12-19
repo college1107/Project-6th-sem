@@ -1,0 +1,14 @@
+.custom-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* width: 100%; */
+    margin: 5%;
+    padding: 3%;
+}
+.custom-div > form{
+    width: 90%;
+}
+.custom-button{
+    text-align: center;
+}
