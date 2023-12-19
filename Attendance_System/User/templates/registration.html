@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Registration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+    <div class="container-fluid">
+        <div class="row align-items-center full-height">
+            <div class="col-md-6 col-lg-5 mx-auto">
+                <div class="card bg-transparent border-0">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Student Registration</h2>
+                        <form method="post">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="id_name" name="name" placeholder="Enter your name" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <input type="text" class="form-control" id="id_class" name="class" placeholder="Class" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <input type="text" class="form-control" id="id_division" name="division" placeholder="Division" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="id_mobile" name="mobile" placeholder="Mobile Number" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="id_enrollment" name="enrollment_number" placeholder="Enrollment Number" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" id="id_email" name="email" placeholder="Email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_image">Upload Image:</label>
+                                <input type="file" class="form-control-file" id="id_image" name="image" accept="image/*">
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

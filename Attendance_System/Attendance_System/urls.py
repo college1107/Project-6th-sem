@@ -22,5 +22,3 @@ urlpatterns = [
     path('collegeAdmin/', include('college_admin.urls')),
     path('faculty/', include('faculty.urls')),
 ]
-
-#ohhhhhhhhhhhhhhhhhhhhhhhhhhhhh
