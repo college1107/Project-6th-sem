@@ -1,17 +1,42 @@
-section{
-    height: 100vh;
-    width: 100%;
-}
-.custom-div{
+.custom-div {
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 5%;
     padding: 3%;
+    width: 80%;
+    background-color: #f0f0f0; /* Light gray background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
 }
-.custom-div > form{
-    width: 90%;
+
+.custom-div > form {
+    width: 100%;
 }
-.custom-button{
+
+.custom-button {
     text-align: center;
+}
+
+.custom-link {
+    color: #ffffff; /* White text */
+    font-size: larger;
+    text-decoration: none;
+    margin: 10px 10px;
+    transition: all 0.5s ease-in-out;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.custom-link:hover {
+    color: #1eff00; /* Light green on hover */
+    margin-bottom: 10px;
+}
+
+.nav-item {
+    margin-bottom: 5px;
+}
+
+.vh-90 {
+    height: 90vh;
 }
