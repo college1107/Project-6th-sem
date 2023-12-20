@@ -2,7 +2,7 @@
 
 /* Dark Mode */
 .dark-mode {
-    background-color: #202020;
+    background-color: #ffffff;
     color: #fff;
 }
 
@@ -20,9 +20,10 @@
 
 .card-title text-center mb-4 {
 
-color: green;
+    color: green;
 
 }
+
 .card:hover {
     transform: scale(1.02);
 }
@@ -33,7 +34,7 @@ color: green;
 }
 
 .card-body:hover {
-    background-color: #2c2c2c;
+    background-color: #ffffff;
 }
 
 /* Form Styling */
