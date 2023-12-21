@@ -9,29 +9,33 @@
             {% csrf_token %}
             {% for message in messages %}
             <div id="center">
+                {% if color %}
                 <div class="alert alert-{{color}} alert-dismissible fade show" id="msg" role="alert">
-                    <p id="alerttxt"><strong>Message: </strong> {{message}}</p>
-                    <button type="button" class="btn-close" id="close-btn" data-bs-dismiss="alert"
-                        aria-label="Close"></button>
+                    {% else %}
+                    <div class="alert alert-danger alert-dismissible fade show" id="msg" role="alert">
+                        {% endif %}
+                        <p id="alerttxt"><strong>Message: </strong> {{message}}</p>
+                        <button type="button" class="btn-close" id="close-btn" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
-            </div>
-            {% endfor %}
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Enrollment No.</label>
-                <input type="text" class="form-control" name="en_no">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Name</label>
-                <input type="text" class="form-control" name="name">
-            </div>
-            <div class="input-group mb-3">
-                <input type="file" class="form-control" id="inputGroupFile02" name="image">
-                <label class="input-group-text" for="inputGroupFile02">Upload</label>
-            </div>
-            <div class="d-block custom-button">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-            <!-- <div class="d-block custom-button mt-3">
+                {% endfor %}
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Enrollment No.</label>
+                    <input type="text" class="form-control" name="en_no">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Name</label>
+                    <input type="text" class="form-control" name="name">
+                </div>
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" id="inputGroupFile02" name="image">
+                    <label class="input-group-text" for="inputGroupFile02">Upload</label>
+                </div>
+                <div class="d-block custom-button">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <!-- <div class="d-block custom-button mt-3">
                 <button class="btn btn-danger">Empty Database</button>
             </div> -->
         </form>

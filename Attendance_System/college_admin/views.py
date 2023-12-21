@@ -5,20 +5,18 @@ from college_admin.models import *
 
 
 def inserting(enno, name, image):
-    a = Insert(enno, name, image)
-    if a != None:
+    temp = Insert(enno, name, image)
+    if temp != None:
         return True
 
 
 def empty_database(request):
     context = {"color": "success"}
-    render(request, "CA_index.html", context)
     try:
-        register.objects.all().delete()  
+        register.objects.all().delete()
         messages.success(request, "Database cleared successfully.")
     except Exception as e:
         messages.error(request, f"Error clearing database: {str(e)}")
-    # render(request, "CA_index.html",context)
     return redirect("CA_home")
 
 
@@ -33,7 +31,7 @@ def CA_home(request):
         en_no = data.get("en_no")
         img = request.FILES.get("image")
 
-        if name=='' or en_no=='':
+        if name == "" or en_no == "":
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "CA_index.html", context)
@@ -46,4 +44,3 @@ def CA_home(request):
             context.update({"color": "success"})
 
     return render(request, "CA_index.html", context)
-
