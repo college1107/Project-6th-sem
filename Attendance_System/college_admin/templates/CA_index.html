@@ -10,8 +10,9 @@
             {% for message in messages %}
             <div id="center">
                 <div class="alert alert-{{color}} alert-dismissible fade show" id="msg" role="alert">
-                    <strong>Message: </strong> {{message}}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <p id="alerttxt"><strong>Message: </strong> {{message}}</p>
+                    <button type="button" class="btn-close" id="close-btn" data-bs-dismiss="alert"
+                        aria-label="Close"></button>
                 </div>
             </div>
             {% endfor %}
@@ -30,8 +31,14 @@
             <div class="d-block custom-button">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-            <div class="d-block custom-button mt-3">
+            <!-- <div class="d-block custom-button mt-3">
                 <button class="btn btn-danger">Empty Database</button>
+            </div> -->
+        </form>
+        <form method="post" action="{% url 'empty_database' %}">
+            {% csrf_token %}
+            <div class="d-block custom-button mt-3">
+                <button type="submit" class="btn btn-danger">Empty Database</button>
             </div>
         </form>
     </div>
