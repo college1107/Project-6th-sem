@@ -11,7 +11,6 @@ def inserting(enno, name, image):
 
 
 def empty_database(request):
-    context = {"color": "success"}
     try:
         register.objects.all().delete()
         messages.success(request, "Database cleared successfully.")
@@ -21,9 +20,7 @@ def empty_database(request):
 
 
 def CA_home(request):
-    context = {
-        "page": "Admin",
-    }
+    context = {"page": "Admin", "color": "info"}  
 
     if request.method == "POST":
         data = request.POST
@@ -35,12 +32,13 @@ def CA_home(request):
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "CA_index.html", context)
+
         if register.objects.filter(en_no=en_no).exists():
             messages.success(request, "Enrollment number is Primary Key in DB")
             context.update({"color": "danger"})
             return render(request, "CA_index.html", context)
+
         if inserting(en_no, name, img):
             messages.success(request, "Data Submitted")
             context.update({"color": "success"})
-
     return render(request, "CA_index.html", context)
