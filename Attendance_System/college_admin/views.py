@@ -12,8 +12,9 @@ def inserting(enno, name, image):
 
 def empty_database(request):
     context = {"color": "success"}
+    render(request, "CA_index.html", context)
     try:
-        register.objects.all().delete()  # Replace 'YourModel' with the actual model you want to clear
+        register.objects.all().delete()  
         messages.success(request, "Database cleared successfully.")
     except Exception as e:
         messages.error(request, f"Error clearing database: {str(e)}")
@@ -21,7 +22,6 @@ def empty_database(request):
     return redirect("CA_home")
 
 
-# Create your views here.
 def CA_home(request):
     context = {
         "page": "Admin",
@@ -33,15 +33,17 @@ def CA_home(request):
         en_no = data.get("en_no")
         img = request.FILES.get("image")
 
-        if register.objects.filter(en_no=en_no).exists():
-            messages.success(request, "Same Enrollment number in DB")
+        if name=='' or en_no=='':
+            messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "CA_index.html", context)
-
+        if register.objects.filter(en_no=en_no).exists():
+            messages.success(request, "Enrollment number is Primary Key in DB")
+            context.update({"color": "danger"})
+            return render(request, "CA_index.html", context)
         if inserting(en_no, name, img):
             messages.success(request, "Data Submitted")
             context.update({"color": "success"})
 
-    # Ensure that "page" is still in the context, even after POST requests
     return render(request, "CA_index.html", context)
 
