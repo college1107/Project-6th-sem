@@ -1,5 +1,5 @@
-{% extends "./base.html" %}
-{% block title %}<title>{{ page }}</title>{% endblock %}
+{% extends "base.html" %}
+{% block title %}<title> {{page}}</title>{% endblock %}
 {% block index %}
 <section class="d-flex justify-content-center align-items-center vh-90">
     <div class="card shadow custom-div">
@@ -34,12 +34,14 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
         </form>
+
         <form method="post" action="{% url 'empty_database' %}">
             {% csrf_token %}
             <div class="d-block custom-button mt-3">
                 <button type="submit" class="btn btn-danger">Empty Database</button>
             </div>
         </form>
+
     </div>
 </section>
 {% endblock %}
