@@ -3,16 +3,15 @@ from college_admin.utils import *
 from django.contrib import messages
 from college_admin.models import *
 
-
 def inserting(enno, name, image):
     temp = Insert(enno, name, image)
     if temp != None:
         return True
 
-
 def empty_database(request):
     try:
         register.objects.all().delete()
+        Emptying('Attendance_System/img/')
         messages.success(request, "Database cleared successfully.")
     except Exception as e:
         messages.error(request, f"Error clearing database: {str(e)}")
