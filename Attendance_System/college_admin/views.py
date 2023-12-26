@@ -30,10 +30,10 @@ def CA_home(request):
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "CA_index.html", context)
-        elif img_str.split('.')[1]!='.jpeg' or img_str.split('.')[1]!='.png' or img_str.split('.')[1]!='.jpg':
-            messages.success(request, "Image is not valid")
-            context.update({"color": "danger"})
-            return render(request, "CA_index.html", context)
+        # elif img_str.split('.')[1]!='.jpeg' or img_str.split('.')[1]!='.png' or img_str.split('.')[1]!='.jpg':
+        #     messages.success(request, "Image is not valid")
+        #     context.update({"color": "danger"})
+        #     return render(request, "CA_index.html", context)
 
         if register.objects.filter(en_no=en_no).exists():
             messages.success(request, "Enrollment number is Primary Key in DB")

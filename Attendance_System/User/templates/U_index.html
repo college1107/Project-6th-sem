@@ -2,5 +2,37 @@
 
 {% block index %}
 {% load static %}
-    <img src="{% static 'img/i.jpg' %}" alt="not">
- {% endblock %}
+<!-- <img src="{% static 'img/i.jpg' %}" alt="not"> -->
+
+<section class="d-flex justify-content-center align-items-center vh-90">
+    <div class="card shadow custom-div">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for message in messages %}
+            <div id="center">
+                {% if color %}
+                <div class="alert alert-{{color}} alert-dismissible fade show" id="msg" role="alert">
+                    {% else %}
+                    <div class="alert alert-danger alert-dismissible fade show" id="msg" role="alert">
+                        {% endif %}
+                        <p id="alerttxt"><strong>Message: </strong> {{message}}</p>
+                        <button type="button" class="btn-close" id="close-btn" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Enrollment No.</label>
+                    <input type="text" class="form-control" name="en_no">
+                </div>
+                <!-- <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Date</label>
+                    <input type="date" class="form-control" name="date">
+                </div> -->
+                <div class="d-block custom-button">
+                    <button type="submit" class="btn btn-primary">Take Attendance</button>
+                </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

@@ -4,4 +4,3 @@ from User.views import *
 urlpatterns = [
     path('',U_home,name='U_home'),
 ]
-
