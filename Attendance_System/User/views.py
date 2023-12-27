@@ -33,8 +33,8 @@ def U_home(request):
 
 def empty_db(request):
     try:
-        attending_class.objects.all().delete()
-        messages.success(request, "DB cleared successfully.")
+        register.objects.all().update(attended=False)
+        messages.success(request, "All Registered student are set to False.")
     except Exception as e:
         messages.error(request, f"Error clearing database: {str(e)}")
     return redirect("U_home")

@@ -2,7 +2,7 @@
 {% block title %}<title> {{page}}</title>{% endblock %}
 {% block index %}
     
-<table class="table table-striped table-hover container mt-4 shadow">
+<table class="table container mt-4 shadow rounded-3 border-5">
     <thead>
         <tr>
           <th scope="col">En no.</th>
@@ -21,11 +21,11 @@
           {% endfor %}
         </tr>
       </tbody>
-  </table>
-  <form method="post" action="{% url 'export_to_excel' %}">
-    {% csrf_token %}
-    <div class="d-block custom-button mt-3">
-        <button type="submit" class="btn btn-primary">Export To Excel</button>
-    </div>
-</form>
+    </table>
+    <form method="post" action="{% url 'export_to_excel' %}">
+      {% csrf_token %}
+      <div class="d-block custom-button mt-3">
+          <button type="submit" class="btn btn-primary shadow">Export To Excel</button>
+      </div>
+  </form>
 {% endblock %}
