@@ -1,6 +1,5 @@
-from User.models import *
+from college_admin.models import *
 
 
-def Insert(en_no, attended):
-    a = attending_class.objects.create(en_no=en_no, attended=attended)
-    return a
+def Insert(en_no):
+   register.objects.filter(en_no=en_no).update(attended=True)

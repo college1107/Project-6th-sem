@@ -17,16 +17,17 @@ def U_home(request):
             context.update({"color": "danger"})
             return render(request, "U_index.html", context)
         if register.objects.filter(en_no=en_no).exists():
-            if attending_class.objects.filter(en_no=en_no).exists():
-                messages.success(request, f"{en_no} already attended")
-                return render(request, "U_index.html")
+            if register.objects.filter(en_no=en_no,attended=False).exists():
+                Insert(en_no)
+                return render(request,"U_success.html")
             else:
-                Insert(en_no=en_no, attended=True)
-            return render(request, "U_success.html", context)
+                messages.success(request, "already attended")
+                context.update({"color": "danger"})
+                return render(request, "U_index.html", context)
         else:
-            messages.success(request, f"Sorry {en_no} you are not registered in DB")
+            messages.success(request, "Not registered in DB")
             context.update({"color": "danger"})
-            return render(request, "U_index.html")
+            return render(request, "U_index.html", context)
 
     return render(request, "U_index.html")
 
