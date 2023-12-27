@@ -29,7 +29,7 @@ def U_home(request):
             context.update({"color": "danger"})
             return render(request, "U_index.html", context)
 
-    return render(request, "U_index.html")
+    return render(request, "U_index.html",context)
 
 def empty_db(request):
     try:

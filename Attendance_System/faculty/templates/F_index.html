@@ -1,4 +1,5 @@
 {% extends "./base.html" %}
+{% block title %}<title> {{page}}</title>{% endblock %}
 {% block index %}
     
 <table class="table table-striped table-hover container mt-4 shadow">
@@ -21,4 +22,10 @@
         </tr>
       </tbody>
   </table>
+  <form method="post" action="{% url 'export_to_excel' %}">
+    {% csrf_token %}
+    <div class="d-block custom-button mt-3">
+        <button type="submit" class="btn btn-primary">Export To Excel</button>
+    </div>
+</form>
 {% endblock %}
