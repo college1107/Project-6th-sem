@@ -33,7 +33,7 @@
                     <button type="submit" class="btn btn-primary">Take Attendance</button>
                 </div>
         </form>
-        <form method="post" action="{% url 'empty_database' %}">
+        <form method="post" action="{% url 'empty_db' %}">
             {% csrf_token %}
             <div class="d-block custom-button mt-3">
                 <button type="submit" class="btn btn-danger">Empty Database</button>

@@ -30,10 +30,10 @@ def U_home(request):
 
     return render(request, "U_index.html")
 
-def empty_database(request):
+def empty_db(request):
     try:
         attending_class.objects.all().delete()
-        messages.success(request, "Database cleared successfully.")
+        messages.success(request, "DB cleared successfully.")
     except Exception as e:
         messages.error(request, f"Error clearing database: {str(e)}")
     return redirect("U_home")
