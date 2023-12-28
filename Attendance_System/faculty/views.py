@@ -5,8 +5,10 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.views import View
 from pymongo import *
+from openpyxl import Workbook
 import time
 import xlwt
+import os
 import pandas as pd
 
 
@@ -18,22 +20,19 @@ def F_home(request):
 
     formatted_date = current_datetime.strftime("%d-%m-%Y")
     date_string = str(formatted_date)
-    client = MongoClient('mongodb+srv://ldrpcollage:HelloWorld@db.kmqzp0u.mongodb.net/')
-    db = client['Attendance_DB']
-    collection = db[date_string]
-    for i in data:
-        tabular_data = [i]    
-        x=collection.insert_many(tabular_data)
-    unique_dates = collection.find()  # Replace 'date_field' with your actual date field name
-    for i in unique_dates:
-        print(i)
-    combined_data = pd.DataFrame()
-
-    # for date in unique_dates:
-    #     date_data = list(collection.find({f'{date_string}': date}))  
-    #     df = pd.DataFrame(date_data)
-    #     combined_data = pd.concat([combined_data, df])
-    # print(combined_data)
+    # ***********************************************************************************************
+    # client = MongoClient('mongodb+srv://ldrpcollage:HelloWorld@db.kmqzp0u.mongodb.net/')
+    # db = client['Attendance_DB']
+    # collection = db[date_string]
+    # for i in data:
+    #     tabular_data = [i]    
+    #     x=collection.insert_many(tabular_data)
+    # unique_dates = collection.find()  # Replace 'date_field' with your actual date field name
+    # for i in unique_dates:
+    #     print(i)
+    # combined_data = pd.DataFrame()
+    # Create a new workbook and add a worksheet
+    # ***********************************************************************************************
 
 
     context = {
@@ -45,29 +44,30 @@ def F_home(request):
 
 
 def download_excel_data(request):
-    response = HttpResponse(content_type="application/ms-excel")
-    response["Content-Disposition"] = f'attachment; filename="{time.strftime("%d-%m-%Y")}.xls"'
-    wb = xlwt.Workbook(encoding="utf-8")
-    ws = wb.add_sheet("sheet1")
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ["En_no", "Name"]
-    # date = time.strftime("%d-%m-%Y")
-    # columns.extend(str(date))
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = f'attachment; filename="{time.strftime("%d-%m-%Y")}.xlsx"'
 
-    queryset = register.objects.all()
-    data = list(queryset.values())
-    df = pd.DataFrame(data)
+    # Create a new workbook and add a worksheet
+    wb = Workbook()
+    ws = wb.active
 
-    for index, my_row in df.iterrows():
-        row_num += 1
-        ws.write(row_num, 0, my_row["en_no"], font_style)
-        ws.write(row_num, 1, my_row["name"], font_style)
-        ws.write(row_num, 2, my_row["attended"], font_style)
+    # Define column headers
+    columns = ["En_no", "Name", "Attended"]
 
+    # Write column headers to the worksheet
+    for col_num, column in enumerate(columns, 1):
+        ws.cell(row=1, column=col_num, value=column)
+
+    # Fetch data from the register model
+    queryset = register.objects.all().values("en_no", "name", "attended")
+
+    # Write data to the worksheet
+    for row_num, row_data in enumerate(queryset, 2):
+        ws.cell(row=row_num, column=1, value=row_data["en_no"])
+        ws.cell(row=row_num, column=2, value=row_data["name"])
+        ws.cell(row=row_num, column=3, value=row_data["attended"])
+
+    # Save the workbook to the response
     wb.save(response)
+
     return response
