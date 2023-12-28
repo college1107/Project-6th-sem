@@ -24,24 +24,16 @@ def F_home(request):
     for i in data:
         tabular_data = [i]    
         x=collection.insert_many(tabular_data)
-    documents = collection.distinct(date_string)
-    print(documents)
-    for i in documents:
+    unique_dates = collection.find()  # Replace 'date_field' with your actual date field name
+    for i in unique_dates:
         print(i)
-    # df = pd.DataFrame() 
-    # for data in documents:
-    #     date_data = list(collection.find('attended'))
-    # print(date_data)
-    # unique_data = collection.distinct(date_string)
-    # dict_data = set()
-    # for d in documents:
-    #     dict_data.update(d)
-    # print(dict_data)
-    # combined_data = pd.DataFrame()
+    combined_data = pd.DataFrame()
 
-
-
-
+    # for date in unique_dates:
+    #     date_data = list(collection.find({f'{date_string}': date}))  
+    #     df = pd.DataFrame(date_data)
+    #     combined_data = pd.concat([combined_data, df])
+    # print(combined_data)
 
 
     context = {
