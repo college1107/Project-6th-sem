@@ -4,6 +4,7 @@ from User.models import *
 from datetime import datetime
 from django.http import HttpResponse
 from django.views import View
+from pymongo import *
 import time
 import xlwt
 import pandas as pd
@@ -14,6 +15,31 @@ def F_home(request):
 
     current_time = time.localtime()
     current_datetime = datetime.fromtimestamp(time.mktime(current_time))
+
+    formatted_date = current_datetime.strftime("%d-%m-%Y")
+    date_string = str(formatted_date)
+    client = MongoClient('mongodb+srv://ldrpcollage:HelloWorld@db.kmqzp0u.mongodb.net/')
+    db = client['Attendance_DB']
+    collection = db[date_string]
+    for i in data:
+        tabular_data = [i]    
+        x=collection.insert_many(tabular_data)
+    documents = collection.distinct('attended')
+    df = pd.DataFrame() 
+    for data in documents:
+        date_data = list(collection.find('attended'))
+    print(date_data)
+    # unique_data = collection.distinct(date_string)
+    # dict_data = set()
+    # for d in documents:
+    #     dict_data.update(d)
+    # print(dict_data)
+    # combined_data = pd.DataFrame()
+
+
+
+
+
 
     context = {
         "page": "Faculty",
@@ -31,7 +57,9 @@ def download_excel_data(request):
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-    columns = ["En_no", "Name", "Attended"]
+    columns = ["En_no", "Name"]
+    # date = time.strftime("%d-%m-%Y")
+    # columns.extend(str(date))
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
     font_style = xlwt.XFStyle()

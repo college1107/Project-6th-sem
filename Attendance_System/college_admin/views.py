@@ -3,6 +3,8 @@ from college_admin.utils import *
 from django.contrib import messages
 from college_admin.models import *
 def inserting(enno, name, image):
+    enno = enno.upper()
+    print(enno)
     temp = Insert(enno, name, image)
     if temp != None:
         return True
