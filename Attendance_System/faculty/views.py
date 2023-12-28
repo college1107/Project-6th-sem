@@ -24,11 +24,14 @@ def F_home(request):
     for i in data:
         tabular_data = [i]    
         x=collection.insert_many(tabular_data)
-    documents = collection.distinct('attended')
-    df = pd.DataFrame() 
-    for data in documents:
-        date_data = list(collection.find('attended'))
-    print(date_data)
+    documents = collection.distinct(date_string)
+    print(documents)
+    for i in documents:
+        print(i)
+    # df = pd.DataFrame() 
+    # for data in documents:
+    #     date_data = list(collection.find('attended'))
+    # print(date_data)
     # unique_data = collection.distinct(date_string)
     # dict_data = set()
     # for d in documents:
