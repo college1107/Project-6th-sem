@@ -11,7 +11,8 @@ def U_home(request):
     if request.method == "POST":
         data = request.POST
         en_no = data.get("en_no")
-        print(en_no)
+        en_no = en_no.upper()
+        # print(en_no)
         if en_no == "":
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
