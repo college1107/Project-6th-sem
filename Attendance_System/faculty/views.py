@@ -21,17 +21,12 @@ def F_home(request):
     formatted_date = current_datetime.strftime("%d-%m-%Y")
     date_string = str(formatted_date)
     # ***********************************************************************************************
-    # client = MongoClient('mongodb+srv://ldrpcollage:HelloWorld@db.kmqzp0u.mongodb.net/')
-    # db = client['Attendance_DB']
-    # collection = db[date_string]
-    # for i in data:
-    #     tabular_data = [i]    
-    #     x=collection.insert_many(tabular_data)
-    # unique_dates = collection.find()  # Replace 'date_field' with your actual date field name
-    # for i in unique_dates:
-    #     print(i)
-    # combined_data = pd.DataFrame()
-    # Create a new workbook and add a worksheet
+    # 
+
+
+
+
+    
     # ***********************************************************************************************
 
 
