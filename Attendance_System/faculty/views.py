@@ -9,6 +9,7 @@ from openpyxl import Workbook
 import time
 import xlwt
 import os
+import psycopg2
 import pandas as pd
 
 
@@ -21,13 +22,26 @@ def F_home(request):
     formatted_date = current_datetime.strftime("%d-%m-%Y")
     date_string = str(formatted_date)
     # ***************************************************************************************
+    db_params = {
+        "host": "127.0.0.1",
+        "database": "Attendance system",
+        "user": "postgres",
+        "password": "1107",
+        "port": "5432", 
+    }
 
+    try:
+        with psycopg2.connect(**db_params) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute( """
+                select * from attendance_system
+                """)
+                rows = cursor.fetchall()
+                print(rows)
 
-
-
-    
+    except psycopg2.Error as e:
+        print("Error connecting to the database:", e)
     # ***************************************************************************************
-
 
     context = {
         "page": "Faculty",
@@ -38,30 +52,28 @@ def F_home(request):
 
 
 def download_excel_data(request):
-    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    response["Content-Disposition"] = f'attachment; filename="{time.strftime("%d-%m-%Y")}.xlsx"'
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response[
+        "Content-Disposition"
+    ] = f'attachment; filename="{time.strftime("%d-%m-%Y")}.xlsx"'
 
-    # Create a new workbook and add a worksheet
     wb = Workbook()
     ws = wb.active
 
-    # Define column headers
     columns = ["En_no", "Name", "Attended"]
 
-    # Write column headers to the worksheet
     for col_num, column in enumerate(columns, 1):
         ws.cell(row=1, column=col_num, value=column)
 
-    # Fetch data from the register model
     queryset = register.objects.all().values("en_no", "name", "attended")
 
-    # Write data to the worksheet
     for row_num, row_data in enumerate(queryset, 2):
         ws.cell(row=row_num, column=1, value=row_data["en_no"])
         ws.cell(row=row_num, column=2, value=row_data["name"])
         ws.cell(row=row_num, column=3, value=row_data["attended"])
 
-    # Save the workbook to the response
     wb.save(response)
 
     return response
