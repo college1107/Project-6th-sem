@@ -2,39 +2,56 @@
 {% block title %}<title> {{page}}</title>{% endblock %}
 {% block index %}
 <div class="d-flex justify-content-center">
-<section class="card shadow m-5 d-flex justify-content-center align-items-center w-50">
-<div class="mb-3 w-75 d-block m-4">
-  <form action="">
-  <label for="exampleInputEmail1" class="form-label">Date :</label>
-  <input type="date" class="form-control" name="en_no" placeholder="Date">
-</form>
-</div>  
-</section> 
+  <section class="card shadow m-5 d-flex justify-content-center align-items-center w-50">
+    <div class="mb-3 w-75 d-block m-4">
+      <form method="post">
+        {% csrf_token %}
+        {% for message in messages %}
+        <div id="center">
+          {% if color %}
+          <div class="alert alert-{{color}} alert-dismissible fade show" id="msg" role="alert">
+            {% else %}
+            <div class="alert alert-danger alert-dismissible fade show" id="msg" role="alert">
+              {% endif %}
+              <p id="alerttxt"><strong>Message: </strong> {{message}}</p>
+              <button type="button" class="btn-close" id="close-btn" data-bs-dismiss="alert"
+                aria-label="Close"></button>
+            </div>
+          </div>
+          {% endfor %}
+          <label for="exampleInputEmail1" class="form-label">Date :</label>
+          <input type="date" class="form-control" name="date">
+          <div class="d-block custom-button mt-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+      </form>
+    </div>
+  </section>
 </div>
 <table class="table container mt-4 shadow rounded-3 border-5">
-    <thead>
-        <tr>
-          <th scope="col">En no.</th>
-          <th scope="col">Name</th>
-          <th scope="col">{{ current_datetime|date:"d-m-Y"}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-            {% for row in data %}
-            <tr>
-              <td>{{ row.en_no }}</td>
-              <td>{{ row.name }}</td>
-              <td>{{ row.attended }}</td>
-            </tr>
-          {% endfor %}
-        </tr>
-      </tbody>
-    </table>
-    <form method="post" action="{% url 'export_to_excel' %}">
-      {% csrf_token %}
-      <div class="d-block custom-button mt-3">
-          <button type="submit" class="btn btn-primary shadow">Export To Excel</button>
-      </div>
-  </form>
+  <thead>
+    <tr>
+      <th scope="col">En no.</th>
+      <th scope="col">Name</th>
+      <th scope="col">{{ current_datetime|date:"d-m-Y"}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {% for row in data %}
+    <tr>
+      <td>{{ row.en_no }}</td>
+      <td>{{ row.name }}</td>
+      <td>{{ row.attended }}</td>
+    </tr>
+    {% endfor %}
+    </tr>
+  </tbody>
+</table>
+<form method="post" action="{% url 'export_to_excel' %}">
+  {% csrf_token %}
+  <div class="d-block custom-button mt-3">
+    <button type="submit" class="btn btn-primary shadow">Export To Excel</button>
+  </div>
+</form>
 {% endblock %}

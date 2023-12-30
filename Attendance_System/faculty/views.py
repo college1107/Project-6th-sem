@@ -6,48 +6,43 @@ from django.http import HttpResponse
 from django.views import View
 from pymongo import *
 from openpyxl import Workbook
+from faculty.utils import *
+from django.contrib import messages
 import time
 import xlwt
-import os
-import psycopg2
 import pandas as pd
 
+def Add_Attendance_to_postgres(date):
+    data = FetchColumn('attendance_system', 'en_no')
+    for en in data:
+        register_instance = register.objects.get(en_no=en[0])
+        attendance_data = register_instance.attended
+        row_column(attendance_data,en,date)
 
 def F_home(request):
     data = register.objects.values("en_no", "name", "attended")
-
     current_time = time.localtime()
     current_datetime = datetime.fromtimestamp(time.mktime(current_time))
-
-    formatted_date = current_datetime.strftime("%d-%m-%Y")
-    date_string = str(formatted_date)
-    # ***************************************************************************************
-    db_params = {
-        "host": "127.0.0.1",
-        "database": "Attendance system",
-        "user": "postgres",
-        "password": "1107",
-        "port": "5432", 
-    }
-
-    try:
-        with psycopg2.connect(**db_params) as connection:
-            with connection.cursor() as cursor:
-                cursor.execute( """
-                select * from attendance_system
-                """)
-                rows = cursor.fetchall()
-                print(rows)
-
-    except psycopg2.Error as e:
-        print("Error connecting to the database:", e)
-    # ***************************************************************************************
-
+    formatted_date = current_datetime.strftime("%Y-%m-%d")
     context = {
-        "page": "Faculty",
-        "data": data,
-        "current_datetime": current_datetime,
-    }
+            "page": "Faculty",
+            "data": data,
+            "current_datetime": current_datetime,
+        }
+    date = ''
+    if request.method == "POST":
+        date = request.POST.get("date")
+        if not date:
+            messages.success(request, "Please add Date")
+            context.update({"color": "danger"})
+            return render(request, "F_index.html", context)
+
+
+    # ***************************************************************************************
+    AddData(data)
+    CreateColumn('attendance_system',formatted_date,'BOOLEAN')
+    Add_Attendance_to_postgres(formatted_date)
+    # ***************************************************************************************
     return render(request, "F_index.html", context)
 
 
