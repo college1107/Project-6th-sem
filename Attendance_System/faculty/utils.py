@@ -1,6 +1,7 @@
 import psycopg2
 from college_admin.models import *
 import pandas as pd
+
 db_params = {
     "host": "127.0.0.1",
     "database": "Attendance system",
@@ -8,6 +9,8 @@ db_params = {
     "password": "1107",
     "port": "5432",
 }
+
+
 def fetch_data_from_postgres(db_params, query):
     try:
         with psycopg2.connect(**db_params) as connection:
@@ -16,6 +19,7 @@ def fetch_data_from_postgres(db_params, query):
     except psycopg2.Error as e:
         print("Error connecting to the database:", e)
         return None
+
 
 def row_column(attendance_data, en_no, date):
     try:
@@ -130,6 +134,9 @@ def FetchData(table_name):
         print("Error connecting to the database:", e)
 
 
+# ***************************
+
+
 def FetchColumn(table_name, column_name):
     try:
         with psycopg2.connect(**db_params) as connection:
@@ -140,11 +147,28 @@ def FetchColumn(table_name, column_name):
                     FROM {table_name};
                     """
                 )
-                data = (
-                    cursor.fetchall()
-                )  
+                data = cursor.fetchall()
                 return data
 
     except psycopg2.Error as e:
         print("Error connecting to the database:", e)
         return None
+
+
+# ***************************
+
+
+def Truncate_column(table_name,column_name):
+    try:
+        with psycopg2.connect(**db_params) as connection:
+            with connection.cursor() as cursor:
+                data = cursor.execute(
+                    f"""
+                UPDATE {table_name}
+                SET "{column_name}" = NULL;
+                """
+                )
+                return data
+
+    except psycopg2.Error as e:
+        print("Error connecting to the database:", e)

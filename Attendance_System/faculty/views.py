@@ -39,7 +39,10 @@ def F_home(request):
             return render(request, "F_index.html", context)
 
     # ***************************************************************************************
-    AddData(data)
+    # DropColumn('attendance_system','2024-01-01')
+    # Truncate_column('attendance_system',date)
+    if data:
+        AddData(data)
     if date:
         CreateColumn("attendance_system", date, "BOOLEAN")
         Add_Attendance_to_postgres(date)
@@ -47,7 +50,7 @@ def F_home(request):
     return render(request, "F_index.html", context)
 
 
-def download_excel_data(request):
+def download_excel_data():
     query = "SELECT * FROM attendance_system"
     data_frame = fetch_data_from_postgres(db_params, query)
     excel_data = BytesIO()
@@ -61,3 +64,6 @@ def download_excel_data(request):
     response.write(excel_data.read())
 
     return response
+
+def SetFalse():
+   pass
