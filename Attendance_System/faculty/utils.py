@@ -1,6 +1,6 @@
 import psycopg2
 from college_admin.models import *
-
+import pandas as pd
 db_params = {
     "host": "127.0.0.1",
     "database": "Attendance system",
@@ -8,7 +8,14 @@ db_params = {
     "password": "1107",
     "port": "5432",
 }
-
+def fetch_data_from_postgres(db_params, query):
+    try:
+        with psycopg2.connect(**db_params) as connection:
+            data_frame = pd.read_sql_query(query, connection)
+        return data_frame
+    except psycopg2.Error as e:
+        print("Error connecting to the database:", e)
+        return None
 
 def row_column(attendance_data, en_no, date):
     try:
