@@ -5,13 +5,14 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.views import View
 from pymongo import *
-from openpyxl import Workbook
 from faculty.utils import *
 from django.contrib import messages
 import time
-import xlwt
-import pandas as pdx    
 from io import BytesIO
+
+current_time = time.localtime()
+current_datetime = datetime.fromtimestamp(time.mktime(current_time))
+formatted_date = current_datetime.strftime("%Y-%m-%d")
 
 
 def Add_Attendance_to_postgres(date):
@@ -19,14 +20,11 @@ def Add_Attendance_to_postgres(date):
     for en in data:
         register_instance = register.objects.get(en_no=en[0])
         attendance_data = register_instance.attended
-        row_column(attendance_data, en, date)
+        row_column(attendance_data, en[0], date)
 
 
 def F_home(request):
     data = register.objects.values("en_no", "name", "attended")
-    current_time = time.localtime()
-    current_datetime = datetime.fromtimestamp(time.mktime(current_time))
-    formatted_date = current_datetime.strftime("%Y-%m-%d")
     context = {
         "page": "Faculty",
         "data": data,
@@ -51,15 +49,15 @@ def F_home(request):
 
 def download_excel_data(request):
     query = "SELECT * FROM attendance_system"
-    excel_filename = "output_data.xlsx"
     data_frame = fetch_data_from_postgres(db_params, query)
     excel_data = BytesIO()
-    data_frame.to_excel(excel_data, index=False, engine='openpyxl')
+    data_frame.to_excel(excel_data, index=False, engine="openpyxl")
     excel_data.seek(0)
 
-        # Create response object
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=output_data.xlsx'
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = f"attachment; filename={formatted_date}.xlsx"
     response.write(excel_data.read())
 
     return response
