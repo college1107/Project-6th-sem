@@ -107,7 +107,7 @@ def CreateColumn(table_name, column_name, d_type):
                 cursor.execute(
                     f"""
                 ALTER TABLE {table_name}
-                ADD COLUMN {column_name} {d_type};
+                ADD COLUMN "{column_name}" {d_type};
                 """
                 )
                 print("column creatred!")
@@ -172,3 +172,7 @@ def Truncate_column(table_name, column_name):
 
     except psycopg2.Error as e:
         print("Error connecting to the database:", e)
+
+
+def SetFalse():
+    register.objects.all().update(attended=False)

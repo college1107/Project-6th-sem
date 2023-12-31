@@ -18,8 +18,7 @@ formatted_date = current_datetime.strftime("%Y-%m-%d")
 def Add_Attendance_to_postgres(date):
     data = FetchColumn("attendance_system", "en_no")
     for en in data:
-        register_instance = register.objects.get(en_no=en[0])
-        attendance_data = register_instance.attended
+        attendance_data = register.objects.get(en_no=en[0]).attended
         row_column(attendance_data, en[0], date)
 
 
@@ -31,6 +30,8 @@ def F_home(request):
         "current_datetime": current_datetime,
     }
     date = ""
+    if data:
+        AddData(data)
     if request.method == "POST":
         date = request.POST.get("date")
         if not date:
@@ -42,12 +43,11 @@ def F_home(request):
     # DropColumn('attendance_system','name')
     # Truncate_column('attendance_system',"name")
     # CreateColumn('attendance_system','name','TEXT')
-    if data:
-        AddData(data)
-    if date:
-        CreateColumn("attendance_system", date, "BOOLEAN")
-        Add_Attendance_to_postgres(date)
+        if date:
+            CreateColumn("attendance_system", date, "BOOLEAN")
+            Add_Attendance_to_postgres(date)
     # ***************************************************************************************
+    SetFalse()
     return render(request, "F_index.html", context)
 
 
@@ -67,5 +67,3 @@ def download_excel_data(request):
     return response
 
 
-def SetFalse():
-    pass
