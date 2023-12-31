@@ -30,8 +30,11 @@ def F_home(request):
         "current_datetime": current_datetime,
     }
     date = ""
-    if data:
-        AddData(data)
+     # *****************************Add data to postgres************************************************
+    # if data:
+    #     AddData(data)
+    # MakePK('attendance_system','en_no')
+     # ***************************************************************************************
     if request.method == "POST":
         date = request.POST.get("date")
         if not date:
@@ -39,7 +42,7 @@ def F_home(request):
             context.update({"color": "danger"})
             return render(request, "F_index.html", context)
 
-    # ***************************************************************************************
+    # *****************************content for postgresql only**********************************
     # DropColumn('attendance_system','name')
     # Truncate_column('attendance_system',"name")
     # CreateColumn('attendance_system','name','TEXT')
@@ -47,7 +50,7 @@ def F_home(request):
             CreateColumn("attendance_system", date, "BOOLEAN")
             Add_Attendance_to_postgres(date)
     # ***************************************************************************************
-    SetFalse()
+    # SetFalse()
     return render(request, "F_index.html", context)
 
 

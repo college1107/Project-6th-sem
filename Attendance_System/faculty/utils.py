@@ -11,6 +11,20 @@ db_params = {
 }
 
 
+def MakePK(tn,cn):
+    try:
+        with psycopg2.connect(**db_params) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    f"""
+                    ALTER TABLE {tn}
+                    ADD PRIMARY KEY ({cn});"""
+                )
+                connection.commit()
+    except psycopg2.Error as e:
+        print("Error updating data:", e)
+
+
 def fetch_data_from_postgres(db_params, query):
     try:
         with psycopg2.connect(**db_params) as connection:
