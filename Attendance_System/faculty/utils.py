@@ -107,7 +107,7 @@ def CreateColumn(table_name, column_name, d_type):
                 cursor.execute(
                     f"""
                 ALTER TABLE {table_name}
-                ADD COLUMN "{column_name}" {d_type};
+                ADD COLUMN {column_name} {d_type};
                 """
                 )
                 print("column creatred!")
@@ -158,7 +158,7 @@ def FetchColumn(table_name, column_name):
 # ***************************
 
 
-def Truncate_column(table_name,column_name):
+def Truncate_column(table_name, column_name):
     try:
         with psycopg2.connect(**db_params) as connection:
             with connection.cursor() as cursor:
