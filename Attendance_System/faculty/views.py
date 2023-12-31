@@ -9,6 +9,7 @@ from faculty.utils import *
 from django.contrib import messages
 import time
 from io import BytesIO
+import threading
 
 current_time = time.localtime()
 current_datetime = datetime.fromtimestamp(time.mktime(current_time))
@@ -20,6 +21,11 @@ def Add_Attendance_to_postgres(date):
     for en in data:
         attendance_data = register.objects.get(en_no=en[0]).attended
         row_column(attendance_data, en[0], date)
+        time.sleep(1)
+
+
+def set_false_after_delay():
+    SetFalse()
 
 
 def F_home(request):
@@ -30,11 +36,11 @@ def F_home(request):
         "current_datetime": current_datetime,
     }
     date = ""
-     # *****************************Add data to postgres************************************************
+    # *****************************Add data to postgres************************************************
     # if data:
     #     AddData(data)
     # MakePK('attendance_system','en_no')
-     # ***************************************************************************************
+    # ***************************************************************************************
     if request.method == "POST":
         date = request.POST.get("date")
         if not date:
@@ -42,15 +48,15 @@ def F_home(request):
             context.update({"color": "danger"})
             return render(request, "F_index.html", context)
 
-    # *****************************content for postgresql only**********************************
-    # DropColumn('attendance_system','name')
-    # Truncate_column('attendance_system',"name")
-    # CreateColumn('attendance_system','name','TEXT')
+        # *****************************content for postgresql only**********************************
+        # DropColumn('attendance_system','name')
+        # Truncate_column('attendance_system',"name")
+        # CreateColumn('attendance_system','name','TEXT')
         if date:
             CreateColumn("attendance_system", date, "BOOLEAN")
             Add_Attendance_to_postgres(date)
+            # threading.Timer(60, set_false_after_delay).start()
     # ***************************************************************************************
-    # SetFalse()
     return render(request, "F_index.html", context)
 
 
@@ -60,7 +66,6 @@ def download_excel_data(request):
     excel_data = BytesIO()
     data_frame.to_excel(excel_data, index=False, engine="openpyxl")
     excel_data.seek(0)
-
     response = HttpResponse(
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
@@ -68,5 +73,3 @@ def download_excel_data(request):
     response.write(excel_data.read())
 
     return response
-
-
