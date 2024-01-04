@@ -6,6 +6,7 @@
 
 <section class="d-flex justify-content-center align-items-center vh-90">
     <div class="card shadow custom-div">
+        <!-- <input type="button" value="Say hello" onClick="showCamera('Android! Start Camera')" />          -->
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {% for message in messages %}
