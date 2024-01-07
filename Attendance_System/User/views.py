@@ -6,20 +6,13 @@ from User.utils import Insert
 
 # Create your views here.
 def U_home(request):
-    client_ip = request.META.get('REMOTE_ADDR')
-    if client_ip:
-        # Make a request to the IP geolocation API
-        access_key = '17bbc22a35afbb5ad7ebce4fe74b56c2'
-        api_url = f'http://api.ipstack.com/{client_ip}?access_key={access_key}'
-       
-
-        # Check if the request was successful
     context = {"page": "Attendance", "color": "info"}
     if request.method == "POST":
         data = request.POST
+        photo = request.POST.get('photo')
+        print(photo)
         en_no = data.get("en_no")
         en_no = en_no.upper()
-        # print(en_no)
         if en_no == "":
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
