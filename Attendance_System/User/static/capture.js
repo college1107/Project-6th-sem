@@ -14,57 +14,48 @@ const getCookie = (name) => {
 }
 
 const csrftoken = getCookie('csrftoken');
-const video = document.getElementById('video-element')
-const image = document.getElementById('img-element')
-const captureBtn = document.getElementById('capture-btn')
-const reloadBtn = document.getElementById('reload-btn')
-
+const video = document.getElementById('video-element');
+const captureBtn = document.getElementById('capture-btn');
 
 if (navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia({ video: true })
         .then((stream) => {
-            video.srcObject = stream
-            const { height, width } = stream.getTracks()[0].getSettings()
+            video.srcObject = stream;
+            const { height, width } = stream.getTracks()[0].getSettings();
 
-            captureBtn.addEventListener('click', e => {
-                e.preventDefault()
-                const track = stream.getVideoTracks()[0]
-                const imageCapture = new ImageCapture(track)
-                console.log(imageCapture)
+            captureBtn.addEventListener('click', function () {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
 
-                imageCapture.takePhoto().then(blob => {
-                    console.log("took photo:", blob)
-                    const img = new Image(width, height)
-                    img.src = URL.createObjectURL(blob)
-                    image.append(img)
+                // Set the canvas dimensions to match the video dimensions
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
 
-                    video.classList.add('not-visible')
+                // Draw the current video frame onto the canvas
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                    const fd = new FormData()
-                    fd.append('csrfmiddlewaretoken', csrftoken)
-                    fd.append('photo', blob,'photo.jpg')
+                // Get the base64-encoded data URL of the canvas content
+                const imageData = canvas.toDataURL('image/png');
 
-                    $.ajax({
-                        type: 'POST',
-                        url: '/',
-                        // enctype: 'multipart/form-data',
-                        data: fd,
-                        processData: false,
-                        contentType: false,
-                        success: (resp) => {
-                            console.log(resp)
-                            window.location.href = window.location.origin
-                        },
-                        error: (err) => {
-                            console.log(err)
-                        }
-                    })
-                }).catch(error => {
-                    console.log('takePhoto() error: ', error);
+                // Send the captured image data to the Django backend
+                fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrftoken // Use the pre-defined CSRF token
+                    },
+                    body: new URLSearchParams({ 'image_data': imageData })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error capturing image:', error);
                 });
             });
         })
         .catch(error => {
-            console.log("Something went wrong!", error);
+            console.error('Error accessing webcam:', error);
         });
 }
