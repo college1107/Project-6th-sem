@@ -5,29 +5,32 @@ from User.models import attending_class
 from User.utils import Insert
 import base64
 
+
 # Create your views here.
 def U_home(request):
-    img=''
+    img, str_img = "", ""
     context = {"page": "Attendance", "color": "info"}
     if request.method == "POST":
+        en_no = str(request.POST.get("en_no"))
+        en_no = en_no.upper()
         image_data = request.POST.get("image_data")
         if image_data is None:
             pass
         else:
-            img=image_data
-        en_no = str(request.POST.get("en_no"))
-        en_no=en_no.upper()
-        if en_no == "" and image_data is None:
+            img = str(image_data)
+        if en_no is "" and image_data == None:
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
+            print('returning...........')
             return render(request, "U_index.html", context)
-        padding = "=" * ((4 - len(img) % 4) % 4)
-
-# Add padding to the base64 string
-        img_padded = img + padding
-        image_data = base64.b64decode(img_padded)
-        with open('img.jpg', 'wb') as f:
-            f.write(image_data)
+        if ";base64" in img:
+            _, str_img = img.split(";base64")
+        else:
+            pass
+        decode_file = base64.b64decode(str_img)
+        with open("img.png", "wb") as f:
+            f.write(decode_file)
+        context.update({'img':decode_file})
         if register.objects.filter(en_no=en_no).exists():
             if register.objects.filter(en_no=en_no, attended=False).exists():
                 Insert(en_no)

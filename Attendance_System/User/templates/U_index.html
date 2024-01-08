@@ -23,17 +23,17 @@
                 </div>
                 {% endfor %}
                 <div class="mb-3">
+                    <div class="mb-3">
+                        <div class="text-center">
+                        <video autoplay="true" id="video-element"></video>
+                    </div>
                     <label for="exampleInputEmail1" class="form-label">Enrollment No.</label>
                     <input type="text" class="form-control" name="en_no">
-                </div>
-                <div class="mb-3">
-                    <div class="text-center">
-                    <video autoplay="true" id="video-element"></video>
                 </div>
                 
                 <!-- <div id="img-element"></div> -->
                 <div class="d-block custom-button">
-                    <button type="submit" class="btn btn-primary">Take Attendance</button>
+                    <button type="submit" class="btn btn-primary" id="capture-btn">Take Attendance</button>
                 </div>
         </form>
         <form method="post" action="{% url 'empty_db' %}">
@@ -42,10 +42,10 @@
                 <button type="submit" class="btn btn-danger">Empty Database</button>
             </div>
         </form>
-        <div class="text-center mt-3">
+        <!-- <div class="text-center mt-3">
             <button class="btn btn-primary" id="capture-btn">take photo</button>
             <button class="btn btn-info" id="reload-btn">reload</button>
-        </div> 
+        </div>  -->
     </div>
 </section>
 {% endblock %}

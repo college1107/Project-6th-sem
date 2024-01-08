@@ -36,9 +36,9 @@ if (navigator.mediaDevices.getUserMedia) {
 
                 // Get the base64-encoded data URL of the canvas content
                 const imageData = canvas.toDataURL('image/png');
-
+                console.log(imageData)
                 // Send the captured image data to the Django backend
-                fetch('/', {
+                fetch('*/Capture_image/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
