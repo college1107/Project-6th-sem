@@ -11,18 +11,21 @@ def U_home(request):
     context = {"page": "Attendance", "color": "info"}
     if request.method == "POST":
         image_data = request.POST.get("image_data")
-        print(f'the image is {image_data}')
         if image_data is None:
             pass
         else:
             img=image_data
         en_no = str(request.POST.get("en_no"))
         en_no=en_no.upper()
-        if en_no == "" and image_data == 'None':
+        if en_no == "" and image_data is None:
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "U_index.html", context)
-        image_data = base64.b64decode(img)
+        padding = "=" * ((4 - len(img) % 4) % 4)
+
+# Add padding to the base64 string
+        img_padded = img + padding
+        image_data = base64.b64decode(img_padded)
         with open('img.jpg', 'wb') as f:
             f.write(image_data)
         if register.objects.filter(en_no=en_no).exists():
