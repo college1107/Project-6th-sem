@@ -38,11 +38,11 @@ if (navigator.mediaDevices.getUserMedia) {
                 const imageData = canvas.toDataURL('image/png');
                 console.log(imageData)
                 // Send the captured image data to the Django backend
-                fetch('*/Capture_image/', {
+                fetch('/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRFToken': csrftoken // Use the pre-defined CSRF token
+                        'X-CSRFToken': csrftoken 
                     },
                     body: new URLSearchParams({ 'image_data': imageData })
                 })
