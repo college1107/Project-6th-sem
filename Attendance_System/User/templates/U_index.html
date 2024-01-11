@@ -4,10 +4,10 @@
 {% load static %}
 <!-- <img src="{% static 'img/i.jpg' %}" alt="not"> -->
 
-<section class="d-flex justify-content-center align-items-center vh-90">
+<section class="d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow custom-div">
         <!-- <input type="button" value="Say hello" onClick="showCamera('Android! Start Camera')" />          -->
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" action="{% url 'U_home'%}">
             {% csrf_token %}
             {% for message in messages %}
             <div id="center">
@@ -24,24 +24,28 @@
                 {% endfor %}
                 <div class="mb-3">
                     <div class="mb-3">
-                        <div class="text-center">
-                        <video autoplay="true" id="video-element"></video>
+                        <label for="exampleInputEmail1" class="form-label">Enrollment No.</label>
+                        <input type="text" class="form-control" name="en_no">
                     </div>
-                    <label for="exampleInputEmail1" class="form-label">Enrollment No.</label>
-                    <input type="text" class="form-control" name="en_no">
                 </div>
-                
-                <!-- <div id="img-element"></div> -->
+
                 <div class="d-block custom-button">
                     <button type="submit" class="btn btn-primary" id="capture-btn">Take Attendance</button>
                 </div>
         </form>
-        <form method="post" action="{% url 'empty_db' %}">
+        <div class="text-center">
+            <img src="{% url 'video_feed' %}" />
+            <form method="post" action="{% url 'capture'%}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <button id="capture-btn" class="btn btn-primary mt-3">Capture Image</button>
+            </form>
+        </div>
+        <!-- <form method="post" action="{% url 'empty_db' %}">
             {% csrf_token %}
             <div class="d-block custom-button mt-3">
                 <button type="submit" class="btn btn-danger">Empty Database</button>
             </div>
-        </form>
+        </form> -->
         <!-- <div class="text-center mt-3">
             <button class="btn btn-primary" id="capture-btn">take photo</button>
             <button class="btn btn-info" id="reload-btn">reload</button>
