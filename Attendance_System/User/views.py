@@ -3,13 +3,11 @@ from django.contrib import messages
 from college_admin.models import register
 from User.models import attending_class
 from User.utils import Insert
-import base64
 import cv2
 from django.http import StreamingHttpResponse
 from django.http import HttpResponse
 
 
-# Create your views here.
 class VideoCapture:
     def __init__(self):
         self.video = cv2.VideoCapture(0)
@@ -41,32 +39,24 @@ def video(request):
     return response
 
 
-def capture(request):
-    try:
-        video_capture = VideoCapture()
-        frame = video_capture.get_frame()
-
-        with open("img.jpg", "wb") as f:
-            f.write(frame)
-
-        return redirect("/")
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        return HttpResponse("An error occurred.")
-
-
 def U_home(request):
     context = {"page": "Attendance", "color": "info"}
     if request.method == "POST":
         en_no = str(request.POST.get("en_no"))
         en_no = en_no.upper()
-        if en_no is None:
+        context = {"page": "Attendance", "color": "info"}
+        video_capture = VideoCapture()
+        frame = video_capture.get_frame()
+        with open("img.jpg", "wb") as f:
+            f.write(frame)
+        if en_no is "":
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "U_index.html", context)
+
         if register.objects.filter(en_no=en_no).exists():
             if register.objects.filter(en_no=en_no, attended=False).exists():
-                Insert(en_no)
+                Insert(en_no)  # Assuming Insert is a function you've defined
                 return render(request, "U_success.html")
             else:
                 messages.success(request, "Already attended")
@@ -76,6 +66,7 @@ def U_home(request):
             messages.success(request, "Not registered in DB")
             context.update({"color": "danger"})
             return render(request, "U_index.html", context)
+
     return render(request, "U_index.html", context)
 
 

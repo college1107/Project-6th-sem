@@ -28,28 +28,23 @@
                         <input type="text" class="form-control" name="en_no">
                     </div>
                 </div>
-
+                <div class="text-center">
+                    {% if frame %}
+                    <img src="{{ Img }}">
+                    {% else %}
+                    <img src="{% url 'video_feed' %}" style="border-radius: 10%;  user-select: none;"/>
+                    {% endif %}
+                </div>
                 <div class="d-block custom-button">
-                    <button type="submit" class="btn btn-primary" id="capture-btn">Take Attendance</button>
+                    <button id="capture-btn" class="btn btn-primary mt-3">Take Attendance</button>
                 </div>
         </form>
-        <div class="text-center">
-            <img src="{% url 'video_feed' %}" />
-            <form method="post" action="{% url 'capture'%}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <button id="capture-btn" class="btn btn-primary mt-3">Capture Image</button>
-            </form>
-        </div>
         <!-- <form method="post" action="{% url 'empty_db' %}">
             {% csrf_token %}
             <div class="d-block custom-button mt-3">
                 <button type="submit" class="btn btn-danger">Empty Database</button>
             </div>
         </form> -->
-        <!-- <div class="text-center mt-3">
-            <button class="btn btn-primary" id="capture-btn">take photo</button>
-            <button class="btn btn-info" id="reload-btn">reload</button>
-        </div>  -->
     </div>
 </section>
 {% endblock %}
