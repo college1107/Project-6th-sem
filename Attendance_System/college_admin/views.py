@@ -41,12 +41,12 @@ def CA_home(request):
     #         messages.success(request, "Enrollment number is Primary Key in DB")
     #         context.update({"color": "danger"})
     #         return render(request, "CA_index.html", context)
-    print('hello')
-    for dict in data:
-        for key, value in dict.items():
-            print(key,value)
-            if inserting(str(key),str(value)):
-                # messages.success(request, "Data Submitted")
-                # context.update({"color": "success"})
-                print('inserted')
+    # print('hello')
+    # for dict in data:
+    #     for key, value in dict.items():
+    #         print(key,value)
+    #         if inserting(str(key),str(value)):
+    #             # messages.success(request, "Data Submitted")
+    #             # context.update({"color": "success"})
+    #             print('inserted')
     return render(request, "CA_index.html", context)
