@@ -28,10 +28,6 @@ def video_feed():
         yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n\r\n")
 
 
-def index(request):
-    return render(request, "index.html")
-
-
 def video(request):
     response = StreamingHttpResponse(
         video_feed(), content_type="multipart/x-mixed-replace; boundary=frame"
@@ -56,7 +52,7 @@ def U_home(request):
 
         if register.objects.filter(en_no=en_no).exists():
             if register.objects.filter(en_no=en_no, attended=False).exists():
-                Insert(en_no)  # Assuming Insert is a function you've defined
+                Insert(en_no)
                 return render(request, "U_success.html")
             else:
                 messages.success(request, "Already attended")
