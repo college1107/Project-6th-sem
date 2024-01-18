@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from college_admin.models import *
 from User.models import *
 from datetime import datetime
@@ -73,3 +73,11 @@ def download_excel_data(request):
     response.write(excel_data.read())
 
     return response
+
+def empty_db(request):
+    try:
+        register.objects.all().update(attended=False)
+        messages.success(request, "All Registered student are set to False.")
+    except Exception as e:
+        messages.error(request, f"Error clearing database: {str(e)}")
+    return redirect("F_home")
