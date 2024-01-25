@@ -6,7 +6,12 @@ from User.utils import Insert
 import cv2
 from django.http import StreamingHttpResponse
 from django.http import HttpResponse
-
+from skimage.metrics import structural_similarity as ssim
+from skimage import io
+from io import BytesIO
+from PIL import Image
+import requests
+import numpy as np
 
 class VideoCapture:
     def __init__(self):
@@ -43,17 +48,36 @@ def U_home(request):
         context = {"page": "Attendance", "color": "info"}
         video_capture = VideoCapture()
         frame = video_capture.get_frame()
-        with open("img.jpg", "wb") as f:
-            f.write(frame)
-        if en_no is "":
+        # with open("img.jpg", "wb") as f:
+        #     f.write(frame)
+        if en_no == "":
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "U_index.html", context)
+# ****************************************************************************************************
+        db_img, similarity_index = None, None
 
         if register.objects.filter(en_no=en_no).exists():
             if register.objects.filter(en_no=en_no, attended=False).exists():
-                Insert(en_no)
-                return render(request, "U_success.html")
+                img_data = register.objects.get(en_no=en_no, attended=False).img.read()
+                db_img = Image.open(BytesIO(img_data))
+
+                if db_img is not None:
+                    # db_img_np = np.array(db_img)
+                    captured_img = frame
+                    similarity_index = ssim(db_img, captured_img, multichannel=True)
+                    print(f"Similarity Index: {similarity_index}")
+
+                similarity_threshold = 0.90
+
+                if similarity_index is not None and similarity_index > similarity_threshold:
+                    Insert(en_no)
+                    return render(request, "U_success.html")
+                else:
+                    messages.success(request, "Sorry, Wrong Person")
+                    context.update({"color": "danger"})
+                    return render(request, "U_index.html", context)
+# ****************************************************************************************************
             else:
                 messages.success(request, "Already attended")
                 context.update({"color": "danger"})

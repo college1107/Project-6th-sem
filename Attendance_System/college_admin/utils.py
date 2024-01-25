@@ -1,8 +1,8 @@
 from college_admin.models import *
 import os
 
-def Insert(en_no, name):
-    a = register.objects.create(en_no=en_no, name=name)
+def Insert(en_no, name,img):
+    a = register.objects.create(en_no=en_no, name=name,img=img)
     return a
 
 def Emptying():
