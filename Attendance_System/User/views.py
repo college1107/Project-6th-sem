@@ -63,7 +63,7 @@ def U_home(request):
                 db_img = Image.open(BytesIO(img_data))
 
                 if db_img is not None:
-                    # db_img_np = np.array(db_img)
+                    
                     captured_img = frame
                     similarity_index = ssim(db_img, captured_img, multichannel=True)
                     print(f"Similarity Index: {similarity_index}")
