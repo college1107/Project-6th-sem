@@ -3,11 +3,11 @@ from college_admin.models import *
 import pandas as pd
 
 db_params = {
-    "host": "127.0.0.1",
-    "database": "Attendance system",
+    "host": "monorail.proxy.rlwy.net",
+    "database": "railway",
     "user": "postgres",
-    "password": "1107",
-    "port": "5432",
+    "password": "f6gca4GaC46E-BGeAA6f1c554BEg2Cdg",
+    "port": "42384",
 }
 
 
