@@ -12,7 +12,7 @@ from io import BytesIO
 from PIL import Image
 import requests
 import numpy as np
-
+import rembg
 class VideoCapture:
     def __init__(self):
         self.video = cv2.VideoCapture(0)
@@ -39,7 +39,21 @@ def video(request):
     )
     return response
 
+def mse(image_bytes1, image_bytes2):
+    image1 = Image.open(BytesIO(image_bytes1)).resize((600, 600))
+    image2 = Image.open(BytesIO(image_bytes2)).resize((600, 600))
 
+    np_image1 = np.array(image1)
+    np_image2 = np.array(image2)
+
+    if np_image1.shape != np_image2.shape:
+        return 0.0
+
+    diff = cv2.subtract(np_image1, np_image2)
+    err = np.sum(diff**2)
+    mse_value = err / float(np_image1.size)
+
+    return mse_value
 def U_home(request):
     context = {"page": "Attendance", "color": "info"}
     if request.method == "POST":
@@ -60,27 +74,17 @@ def U_home(request):
         if register.objects.filter(en_no=en_no).exists():
             if register.objects.filter(en_no=en_no, attended=False).exists():
                 img_data = register.objects.get(en_no=en_no, attended=False).img.read()
-                db_img = Image.open(BytesIO(img_data)).resize((600, 600))
-                # output_data = rembg.remove(input_data)
-                db_img_array = np.array(db_img)
+                db_img = img_data
+                # db_img_array = np.array(db_img)
 
                 if db_img is not None:
-                    # print(Image.open(BytesIO(frame)).size)
-                    captured_img = Image.open(BytesIO(frame)).resize((600, 600))
-                    with open('captured_img.jpg','wb') as f:
-                        f.write(frame)
-                    captured_img_array = np.array(captured_img)
-
-                    mse = np.sum((db_img_array - captured_img_array) ** 2) / float(
-                        db_img_array.size
-                    )
-                    normalized_mse = mse / 255**2
-                    print(normalized_mse)
-                    print(f"Similarity Index: {mse}")
+                    captured_img = frame
+                    error = mse(db_img, captured_img)
+                    print(error)
 
                 similarity_threshold = 0.01 
 
-                if (similarity_index is not None and normalized_mse <= similarity_threshold):
+                if (similarity_index is not None and mse <= similarity_threshold):
                     Insert(en_no)
                     return render(request, "U_success.html")
                 else:
