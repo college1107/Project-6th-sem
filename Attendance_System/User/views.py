@@ -54,30 +54,40 @@ def U_home(request):
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "U_index.html", context)
-# ****************************************************************************************************
+        # ****************************************************************************************************
         db_img, similarity_index = None, None
 
         if register.objects.filter(en_no=en_no).exists():
             if register.objects.filter(en_no=en_no, attended=False).exists():
                 img_data = register.objects.get(en_no=en_no, attended=False).img.read()
-                db_img = Image.open(BytesIO(img_data))
+                db_img = Image.open(BytesIO(img_data)).resize((600, 600))
+                # output_data = rembg.remove(input_data)
+                db_img_array = np.array(db_img)
 
                 if db_img is not None:
-                    
-                    captured_img = frame
-                    similarity_index = ssim(db_img, captured_img, multichannel=True)
-                    print(f"Similarity Index: {similarity_index}")
+                    # print(Image.open(BytesIO(frame)).size)
+                    captured_img = Image.open(BytesIO(frame)).resize((600, 600))
+                    with open('captured_img.jpg','wb') as f:
+                        f.write(frame)
+                    captured_img_array = np.array(captured_img)
 
-                similarity_threshold = 0.90
+                    mse = np.sum((db_img_array - captured_img_array) ** 2) / float(
+                        db_img_array.size
+                    )
+                    normalized_mse = mse / 255**2
+                    print(normalized_mse)
+                    print(f"Similarity Index: {mse}")
 
-                if similarity_index is not None and similarity_index > similarity_threshold:
+                similarity_threshold = 0.01 
+
+                if (similarity_index is not None and normalized_mse <= similarity_threshold):
                     Insert(en_no)
                     return render(request, "U_success.html")
                 else:
                     messages.success(request, "Sorry, Wrong Person")
                     context.update({"color": "danger"})
                     return render(request, "U_index.html", context)
-# ****************************************************************************************************
+            # ****************************************************************************************************
             else:
                 messages.success(request, "Already attended")
                 context.update({"color": "danger"})
