@@ -67,12 +67,9 @@ def U_home(request):
                 db_img_array = np.array(db_img)
 
                 if db_img is not None:
-                    _, buffer = cv2.imencode(".jpg", frame)
-                    frame_base64 = base64.b64encode(buffer).decode("utf-8")
-                    captured_img = Detect_Face(frame_base64)
-                    captured_img_array = np.array(captured_img)
-
-                    mse = np.sum((db_img_array - captured_img_array) ** 2) / float(
+                    capture_img = Detect_Face(np.array(frame).tobytes())
+                    cv2.imwrite('output_image.jpg', capture_img)
+                    mse = np.sum((db_img_array - capture_img) ** 2) / float(
                         db_img_array.size
                     )
                     normalized_mse = mse / 255**2

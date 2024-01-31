@@ -11,6 +11,7 @@ def Insert(en_no):
 
 def Detect_Face(img_data):
     img = Image.open(BytesIO(img_data))
+    print(img)
     img_array = np.array(img)
 
     cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
@@ -21,10 +22,9 @@ def Detect_Face(img_data):
     #    return None
 
     for i, (x, y, w, h) in enumerate(faces):
-        if 200 < w < img_array.shape[1] and 200 < h < img_array.shape[0]:
+      #   if 200 < w < img_array.shape[1] and 200 < h < img_array.shape[0]:
             face_roi = img_array[y : y + h + 20, x : x + w]
             pil_detected_face = Image.fromarray(face_roi)
-            pil_detected_face.save("detected_face_pil.jpg")
-            return pil_detected_face
-        else:
-            return None
+            # pil_detected_face.save("detected_face_pil.jpg")
+            return face_roi
+        
