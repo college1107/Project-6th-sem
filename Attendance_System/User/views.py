@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from college_admin.models import register
 from User.models import attending_class
-from User.utils import Insert
+from User.utils import *
 import cv2
 from django.http import StreamingHttpResponse
 from django.http import HttpResponse
@@ -12,6 +12,8 @@ from io import BytesIO
 from PIL import Image
 import requests
 import numpy as np
+import base64
+
 
 class VideoCapture:
     def __init__(self):
@@ -60,15 +62,14 @@ def U_home(request):
         if register.objects.filter(en_no=en_no).exists():
             if register.objects.filter(en_no=en_no, attended=False).exists():
                 img_data = register.objects.get(en_no=en_no, attended=False).img.read()
-                db_img = Image.open(BytesIO(img_data)).resize((600, 600))
-                # output_data = rembg.remove(input_data)
+                db_img = Detect_Face(img_data)
+                print(db_img)
                 db_img_array = np.array(db_img)
 
                 if db_img is not None:
-                    # print(Image.open(BytesIO(frame)).size)
-                    captured_img = Image.open(BytesIO(frame)).resize((600, 600))
-                    with open('captured_img.jpg','wb') as f:
-                        f.write(frame)
+                    _, buffer = cv2.imencode(".jpg", frame)
+                    frame_base64 = base64.b64encode(buffer).decode("utf-8")
+                    captured_img = Detect_Face(frame_base64)
                     captured_img_array = np.array(captured_img)
 
                     mse = np.sum((db_img_array - captured_img_array) ** 2) / float(
@@ -78,9 +79,12 @@ def U_home(request):
                     print(normalized_mse)
                     print(f"Similarity Index: {mse}")
 
-                similarity_threshold = 0.01 
+                similarity_threshold = 0.01
 
-                if (similarity_index is not None and normalized_mse <= similarity_threshold):
+                if (
+                    similarity_index is not None
+                    and normalized_mse <= similarity_threshold
+                ):
                     Insert(en_no)
                     return render(request, "U_success.html")
                 else:
