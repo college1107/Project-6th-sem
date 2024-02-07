@@ -3,28 +3,21 @@ from io import BytesIO
 import cv2
 import numpy as np
 from college_admin.models import *
-
+from deepface import DeepFace
+from django.core.files.base import ContentFile
 
 def Insert(en_no):
     register.objects.filter(en_no=en_no).update(attended=True)
 
 
-def Detect_Face(img_data):
-    img = Image.open(BytesIO(img_data))
-    print(img)
-    img_array = np.array(img)
-
-    cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-    face_cascade = cv2.CascadeClassifier(cascade_path)
-    faces = face_cascade.detectMultiScale(img_array, scaleFactor=1.05, minNeighbors=10)
-
-    #  if not faces:
-    #    return None
-
-    for i, (x, y, w, h) in enumerate(faces):
-      #   if 200 < w < img_array.shape[1] and 200 < h < img_array.shape[0]:
-            face_roi = img_array[y : y + h + 20, x : x + w]
-            pil_detected_face = Image.fromarray(face_roi)
-            # pil_detected_face.save("detected_face_pil.jpg")
-            return face_roi
-        
+def Detect_Face(en_no,img_data):
+    register_entry = register.objects.get(en_no=en_no)
+    img = register_entry.img.read()
+    if isinstance(img_data, str):
+        img_data = img_data.encode('utf-8')
+    image_frame = Image.open(BytesIO(img_data))
+    image_db = Image.open(BytesIO(img))
+    image_frame_np = np.array(image_frame)
+    image_db_np = np.array(image_db)
+    result = DeepFace.verify(image_frame_np, image_db_np, model_name="VGG-Face", enforce_detection=False)
+    return result['verified']

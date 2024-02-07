@@ -13,8 +13,8 @@ from PIL import Image
 import requests
 import numpy as np
 import base64
-
-
+from django.core.files.base import ContentFile
+from deepface import DeepFace
 class VideoCapture:
     def __init__(self):
         self.video = cv2.VideoCapture(0)
@@ -50,38 +50,20 @@ def U_home(request):
         context = {"page": "Attendance", "color": "info"}
         video_capture = VideoCapture()
         frame = video_capture.get_frame()
-        # with open("img.jpg", "wb") as f:
-        #     f.write(frame)
+
         if en_no == "":
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "U_index.html", context)
         # ****************************************************************************************************
-        db_img, similarity_index = None, None
-
         if register.objects.filter(en_no=en_no).exists():
             if register.objects.filter(en_no=en_no, attended=False).exists():
-                img_data = register.objects.get(en_no=en_no, attended=False).img.read()
-                db_img = Detect_Face(img_data)
-                print(db_img)
-                db_img_array = np.array(db_img)
-
-                if db_img is not None:
-                    capture_img = Detect_Face(np.array(frame).tobytes())
-                    cv2.imwrite('output_image.jpg', capture_img)
-                    mse = np.sum((db_img_array - capture_img) ** 2) / float(
-                        db_img_array.size
-                    )
-                    normalized_mse = mse / 255**2
-                    print(normalized_mse)
-                    print(f"Similarity Index: {mse}")
-
-                similarity_threshold = 0.01
-
-                if (
-                    similarity_index is not None
-                    and normalized_mse <= similarity_threshold
-                ):
+                image = Image.open(BytesIO(frame))
+                with BytesIO() as buffer:
+                    image.save(buffer, format='JPEG')
+                    jpeg_data = buffer.getvalue()
+                result = Detect_Face(en_no,frame)
+                if result==True:
                     Insert(en_no)
                     return render(request, "U_success.html")
                 else:
