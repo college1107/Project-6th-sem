@@ -1,20 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from college_admin.models import register
-from User.models import attending_class
 from User.utils import *
 import cv2
 from django.http import StreamingHttpResponse
-from django.http import HttpResponse
-from skimage.metrics import structural_similarity as ssim
-from skimage import io
 from io import BytesIO
 from PIL import Image
-import requests
-import numpy as np
-import base64
-from django.core.files.base import ContentFile
-from deepface import DeepFace
+
+
 class VideoCapture:
     def __init__(self):
         self.video = cv2.VideoCapture(0)
@@ -51,7 +44,7 @@ def U_home(request):
         video_capture = VideoCapture()
         frame = video_capture.get_frame()
 
-        if en_no == "":
+        if en_no == '':
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "U_index.html", context)
@@ -60,10 +53,10 @@ def U_home(request):
             if register.objects.filter(en_no=en_no, attended=False).exists():
                 image = Image.open(BytesIO(frame))
                 with BytesIO() as buffer:
-                    image.save(buffer, format='JPEG')
+                    image.save(buffer, format="JPEG")
                     jpeg_data = buffer.getvalue()
-                result = Detect_Face(en_no,frame)
-                if result==True:
+                result = Detect_Face(en_no, frame)
+                if result == True:
                     Insert(en_no)
                     return render(request, "U_success.html")
                 else:

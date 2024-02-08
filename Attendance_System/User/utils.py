@@ -1,10 +1,8 @@
 from PIL import Image
 from io import BytesIO
-import cv2
 import numpy as np
 from college_admin.models import *
 from deepface import DeepFace
-from django.core.files.base import ContentFile
 
 def Insert(en_no):
     register.objects.filter(en_no=en_no).update(attended=True)
