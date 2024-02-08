@@ -54,8 +54,8 @@ def U_home(request):
                 image = Image.open(BytesIO(frame))
                 with BytesIO() as buffer:
                     image.save(buffer, format="JPEG")
-                    jpeg_data = buffer.getvalue()
                 result = Detect_Face(en_no, frame)
+                print(result)
                 if result == True:
                     Insert(en_no)
                     return render(request, "U_success.html")
