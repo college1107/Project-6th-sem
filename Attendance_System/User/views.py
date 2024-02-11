@@ -6,7 +6,7 @@ import cv2
 from django.http import StreamingHttpResponse
 from io import BytesIO
 from PIL import Image
-
+from django.core.files.base import ContentFile
 
 class VideoCapture:
     def __init__(self):
@@ -51,10 +51,10 @@ def U_home(request):
         # ****************************************************************************************************
         if register.objects.filter(en_no=en_no).exists():
             if register.objects.filter(en_no=en_no, attended=False).exists():
-                image = Image.open(BytesIO(frame))
-                with BytesIO() as buffer:
-                    image.save(buffer, format="JPEG")
-                result = Detect_Face(en_no, frame)
+                file_content = ContentFile(frame)
+                record = register.objects.get(en_no=en_no)
+                record.cap_img.save(f'cap_img{en_no}.jpg', file_content)
+                result = Detect_Face(en_no)
                 print(result)
                 if result == True:
                     Insert(en_no)

@@ -4,18 +4,25 @@ import numpy as np
 from college_admin.models import *
 from deepface import DeepFace
 
+
 def Insert(en_no):
     register.objects.filter(en_no=en_no).update(attended=True)
 
 
-def Detect_Face(en_no,img_data):
+img_data = None
+
+
+def Detect_Face(en_no):
     register_entry = register.objects.get(en_no=en_no)
-    img = register_entry.img.read()
-    if isinstance(img_data, str):
-        img_data = img_data.encode('utf-8')
-    image_frame = Image.open(BytesIO(img_data))
-    image_db = Image.open(BytesIO(img))
+
+    img_data = register_entry.img.read()
+    cap_img_data = register_entry.cap_img.read()
+
+    print(cap_img_data)
+    image_frame = Image.open(BytesIO(cap_img_data))
+    image_db = Image.open(BytesIO(img_data))
     image_frame_np = np.array(image_frame)
     image_db_np = np.array(image_db)
-    result = DeepFace.verify(image_frame_np, image_db_np, model_name="VGG-Face", enforce_detection=False)
-    return result['verified']
+    result = DeepFace.verify(image_frame_np, image_db_np, enforce_detection=False)
+
+    return result["verified"]

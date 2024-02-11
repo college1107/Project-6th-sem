@@ -5,4 +5,5 @@ class register(models.Model):
     name = models.TextField(max_length=20)
     img = models.ImageField(upload_to="img/")
     attended = models.BooleanField(default=False)
+    cap_img = models.ImageField(upload_to='cap_images/')
     
