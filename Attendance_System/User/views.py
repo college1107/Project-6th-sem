@@ -8,6 +8,7 @@ from io import BytesIO
 from PIL import Image
 from django.core.files.base import ContentFile
 
+
 class VideoCapture:
     def __init__(self):
         self.video = cv2.VideoCapture(0)
@@ -44,7 +45,7 @@ def U_home(request):
         video_capture = VideoCapture()
         frame = video_capture.get_frame()
 
-        if en_no == '':
+        if en_no == "":
             messages.success(request, "Missing Field's")
             context.update({"color": "danger"})
             return render(request, "U_index.html", context)
@@ -53,10 +54,12 @@ def U_home(request):
             if register.objects.filter(en_no=en_no, attended=False).exists():
                 file_content = ContentFile(frame)
                 record = register.objects.get(en_no=en_no)
-                record.cap_img.save(f'cap_img{en_no}.jpg', file_content)
+                record.cap_img.save(f"cap_img{en_no}.jpg", file_content)
+                render(request,'loader.html')
                 result = Detect_Face(en_no)
                 print(result)
                 if result == True:
+                    redirect('loader.html')
                     Insert(en_no)
                     return render(request, "U_success.html")
                 else:

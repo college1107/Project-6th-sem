@@ -186,7 +186,7 @@ def Truncate_column(table_name, column_name):
 
     except psycopg2.Error as e:
         print("Error connecting to the database:", e)
-
+import os
 
 def SetFalse():
     register.objects.all().update(attended=False)

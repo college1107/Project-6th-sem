@@ -77,6 +77,15 @@ def download_excel_data(request):
 def empty_db(request):
     try:
         register.objects.all().update(attended=False)
+        current_directory = os.getcwd()
+        file_path = os.path.join(current_directory,'cap_images')
+        print(file_path)
+        if os.path.exists(file_path):
+            for img in os.listdir(file_path):
+                os.remove(f"{file_path}/{img}")
+            print(f"File {file_path} removed successfully.")
+        else:
+            print(f"File {file_path} does not exist.")
         messages.success(request, "All Registered student are set to False.")
     except Exception as e:
         messages.error(request, f"Error clearing database: {str(e)}")

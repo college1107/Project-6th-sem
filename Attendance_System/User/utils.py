@@ -17,8 +17,6 @@ def Detect_Face(en_no):
 
     img_data = register_entry.img.read()
     cap_img_data = register_entry.cap_img.read()
-
-    print(cap_img_data)
     image_frame = Image.open(BytesIO(cap_img_data))
     image_db = Image.open(BytesIO(img_data))
     image_frame_np = np.array(image_frame)
