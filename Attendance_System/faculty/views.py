@@ -18,10 +18,11 @@ formatted_date = current_datetime.strftime("%Y-%m-%d")
 
 def Add_Attendance_to_postgres(date):
     data = FetchColumn("attendance_system", "en_no")
+    print(data)
     for en in data:
-        attendance_data = register.objects.get(en_no=en[0]).attended
-        row_column(attendance_data, en[0], date)
-        time.sleep(1)
+            attendance_data = register.objects.get(en_no=en[0]).attended
+            row_column(attendance_data, en[0], date)
+
 
 
 def set_false_after_delay():
@@ -39,22 +40,25 @@ def F_home(request):
     # *****************************Add data to postgres************************************************
     # if data:
     #     AddData(data)
-    # MakePK('attendance_system','en_no')
+    # MakePK('attendance_system','en_no') # private key
     # ***************************************************************************************
+    # DropColumn('attendance_system','2024-12-31')    
+    # Truncate_column('attendance_system',"en_no")
     if request.method == "POST":
         date = request.POST.get("date")
         if not date:
-            messages.success(request, "Please add Date")
+            messages.success(request, "Please enter Date")
             context.update({"color": "danger"})
             return render(request, "F_index.html", context)
 
         # *****************************content for postgresql only**********************************
-        # DropColumn('attendance_system','name')
-        # Truncate_column('attendance_system',"name")
         # CreateColumn('attendance_system','name','TEXT')
         if date:
             CreateColumn("attendance_system", date, "BOOLEAN")
-            Add_Attendance_to_postgres(date)
+            try:
+                Add_Attendance_to_postgres(date)
+            except Exception as e:
+                print(e)
             # threading.Timer(60, set_false_after_delay).start()
     # ***************************************************************************************
     return render(request, "F_index.html", context)
