@@ -57,8 +57,7 @@ def U_home(request):
                 record.cap_img.save(f"cap_img{en_no}.jpg", file_content)
                 render(request,'loader.html')
                 result = Detect_Face(en_no)
-                print(result)
-                if result == True:
+                if result > 85:
                     redirect('loader.html')
                     Insert(en_no)
                     return render(request, "U_success.html")
