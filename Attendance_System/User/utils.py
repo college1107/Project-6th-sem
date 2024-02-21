@@ -1,23 +1,17 @@
 from PIL import Image
 from io import BytesIO
-import numpy as np
 from college_admin.models import *
 import requests
 
 
-def Insert(en_no):
-    register.objects.filter(en_no=en_no).update(attended=True)
-
-
 img_data = None
-
 api_key = "96nZGD8D9jq_ZaULqKUG21vo1WaSOFkT"
 api_secret = "UFF7Q1fyl_RMdCjp6odzEBnRwg_TFIij"
-
 url = "https://api-us.faceplusplus.com/facepp/v3/compare"
 
 
-from io import BytesIO
+def Insert(en_no):
+    register.objects.filter(en_no=en_no).update(attended=True)
 
 
 def Detect_Face(en_no):
@@ -37,7 +31,7 @@ def Detect_Face(en_no):
         "api_key": api_key,
         "api_secret": api_secret,
     }
-    
+
     files = {
         "image_file1": ("image1.jpg", image_frame_bytes.getvalue()),
         "image_file2": ("image2.jpg", image_db_bytes.getvalue()),

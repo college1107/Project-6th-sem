@@ -4,8 +4,6 @@ from college_admin.models import register
 from User.utils import *
 import cv2
 from django.http import StreamingHttpResponse
-from io import BytesIO
-from PIL import Image
 from django.core.files.base import ContentFile
 
 
@@ -59,7 +57,7 @@ def U_home(request):
                     result = Detect_Face(en_no)
                 except Exception:
                     messages.success(request, "Sorry, No Person detected")
-                    context.update({"color": "danger"})    
+                    context.update({"color": "danger"})
                     return render(request, "U_index.html", context)
                 if result > 85:
                     Insert(en_no)

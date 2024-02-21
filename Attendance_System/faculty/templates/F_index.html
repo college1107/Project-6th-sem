@@ -20,7 +20,7 @@
     {% endfor %}
     </tr>
   </tbody>
-  
+
 </table>
 <form method="post" action="{% url 'export_to_excel' %}">
   {% csrf_token %}
@@ -46,18 +46,19 @@
             </div>
           </div>
           {% endfor %}
-          <label for="exampleInputEmail1" class="form-label d-block">Date : <small>*only enter date when the student's attendance is taken</small> </label>
+          <label for="exampleInputEmail1" class="form-label d-block">Date : <small>*only enter date when the student's
+              attendance is taken</small> </label>
           <input type="date" class="form-control" name="date">
           <div class="d-block custom-button mt-3">
             <button type="submit" class="btn btn-primary">Submit</button>
           </div>
       </form>
       <form method="post" action="{% url 'empty' %}">
-            {% csrf_token %}
-            <div class="d-block custom-button mt-3">
-                <button type="submit" class="btn btn-danger">Set False</button>
-            </div>
-        </form>
+        {% csrf_token %}
+        <div class="d-block custom-button mt-3">
+          <button type="submit" class="btn btn-danger">Set False</button>
+        </div>
+      </form>
     </div>
   </section>
-{% endblock %}
+  {% endblock %}

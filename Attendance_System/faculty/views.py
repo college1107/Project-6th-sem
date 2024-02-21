@@ -9,7 +9,6 @@ from faculty.utils import *
 from django.contrib import messages
 import time
 from io import BytesIO
-import threading
 
 current_time = time.localtime()
 current_datetime = datetime.fromtimestamp(time.mktime(current_time))
@@ -30,12 +29,12 @@ def set_false_after_delay():
 
 def F_home(request):
     data = register.objects.values("en_no", "name", "attended")
+    date = ""
     context = {
         "page": "Faculty",
         "data": data,
         "current_datetime": current_datetime,
     }
-    date = ""
     # *****************************Add data to postgres************************************************
     # if data:
     #     AddData(data)
