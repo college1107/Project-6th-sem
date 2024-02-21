@@ -55,10 +55,13 @@ def U_home(request):
                 file_content = ContentFile(frame)
                 record = register.objects.get(en_no=en_no)
                 record.cap_img.save(f"cap_img{en_no}.jpg", file_content)
-                render(request,'loader.html')
-                result = Detect_Face(en_no)
+                try:
+                    result = Detect_Face(en_no)
+                except Exception:
+                    messages.success(request, "Sorry, No Person detected")
+                    context.update({"color": "danger"})    
+                    return render(request, "U_index.html", context)
                 if result > 85:
-                    redirect('loader.html')
                     Insert(en_no)
                     return render(request, "U_success.html")
                 else:

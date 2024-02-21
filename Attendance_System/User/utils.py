@@ -49,4 +49,8 @@ def Detect_Face(en_no):
     image_db.close()
 
     res = response.json()
-    return res["confidence"]
+    if res["confidence"]:
+
+        return res["confidence"]
+    else:
+        return 0
