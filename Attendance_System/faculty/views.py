@@ -29,18 +29,21 @@ def set_false_after_delay():
 
 def F_home(request):
     data = register.objects.values("en_no", "name", "attended")
+    for i in data:
+        print(i)
     date = ""
     context = {
         "page": "Faculty",
         "data": data,
         "current_datetime": current_datetime,
     }
+    # DropTable('attendance_system')
     # *****************************Add data to postgres************************************************
-    # if data:
-    #     AddData(data)
+    if data:
+        AddData(data)
     # MakePK('attendance_system','en_no') # private key
     # ***************************************************************************************
-    # DropColumn('attendance_system','2024-03-09')
+    # DropColumn('attendance_system','en_no')
     # Truncate_column('attendance_system',"en_no")
     if request.method == "POST":
         date = request.POST.get("date")
@@ -50,6 +53,7 @@ def F_home(request):
             return render(request, "F_index.html", context)
 
         # *****************************content for postgresql only**********************************
+        # CreateColumn('attendance_system','en_no','TEXT')
         # CreateColumn('attendance_system','name','TEXT')
         if date:
             CreateColumn("attendance_system", date, "BOOLEAN")
