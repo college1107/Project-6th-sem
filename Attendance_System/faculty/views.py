@@ -40,7 +40,7 @@ def F_home(request):
     #     AddData(data)
     # MakePK('attendance_system','en_no') # private key
     # ***************************************************************************************
-    # DropColumn('attendance_system','2024-12-31')
+    # DropColumn('attendance_system','2024-03-09')
     # Truncate_column('attendance_system',"en_no")
     if request.method == "POST":
         date = request.POST.get("date")
