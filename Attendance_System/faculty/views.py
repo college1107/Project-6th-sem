@@ -29,8 +29,6 @@ def set_false_after_delay():
 
 def F_home(request):
     data = register.objects.values("en_no", "name", "attended")
-    for i in data:
-        print(i)
     date = ""
     context = {
         "page": "Faculty",
@@ -39,8 +37,8 @@ def F_home(request):
     }
     # DropTable('attendance_system')
     # *****************************Add data to postgres************************************************
-    if data:
-        AddData(data)
+    # if data:
+    #     AddData(data)
     # MakePK('attendance_system','en_no') # private key
     # ***************************************************************************************
     # DropColumn('attendance_system','en_no')
